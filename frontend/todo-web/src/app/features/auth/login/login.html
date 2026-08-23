@@ -1,0 +1,115 @@
+<main class="login-page">
+  <section
+    class="login-card"
+    aria-labelledby="login-title"
+  >
+    <div class="brand">
+      <span class="brand-mark">✓</span>
+      <span>Todo App</span>
+    </div>
+
+    <div class="heading">
+      <h1 id="login-title">
+        Welcome back
+      </h1>
+
+      <p>
+        Sign in to manage your todos.
+      </p>
+    </div>
+
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="submit()"
+      novalidate
+    >
+      <div class="field">
+        <label for="email">
+          Email
+        </label>
+
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          placeholder="you@example.com"
+        />
+
+        @if (
+          loginForm.controls.email.touched &&
+          loginForm.controls.email.hasError('required')
+        ) {
+          <p class="field-error">
+            Email is required.
+          </p>
+        }
+
+        @if (
+          loginForm.controls.email.touched &&
+          loginForm.controls.email.hasError('email')
+        ) {
+          <p class="field-error">
+            Enter a valid email address.
+          </p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="password">
+          Password
+        </label>
+
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+          placeholder="Enter your password"
+        />
+
+        @if (
+          loginForm.controls.password.touched &&
+          loginForm.controls.password.hasError('required')
+        ) {
+          <p class="field-error">
+            Password is required.
+          </p>
+        }
+      </div>
+
+      @if (errorMessage()) {
+        <div
+          class="alert"
+          role="alert"
+        >
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <button
+        class="submit-button"
+        type="submit"
+        [disabled]="submitting()"
+      >
+        @if (submitting()) {
+          Signing in...
+        } @else {
+          Sign in
+        }
+      </button>
+    </form>
+
+    <div class="demo-account">
+      <strong>Demo account</strong>
+
+      <span>
+        demo@todo.local
+      </span>
+
+      <span>
+        Todo123!
+      </span>
+    </div>
+  </section>
+</main>

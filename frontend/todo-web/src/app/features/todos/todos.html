@@ -1,0 +1,35 @@
+<main class="todos-page">
+  <section class="todos-container">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">
+          Todo App
+        </p>
+
+        <h1>
+          My Todos
+        </h1>
+
+        @if (authService.currentUserEmail()) {
+          <p class="user-email">
+            {{ authService.currentUserEmail() }}
+          </p>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="logout-button"
+        (click)="logout()"
+      >
+        Sign out
+      </button>
+    </header>
+
+    <section class="todo-shell">
+      <p>
+        Your todos will appear here.
+      </p>
+    </section>
+  </section>
+</main>
