@@ -10,6 +10,14 @@ public sealed class CreateTodoCommandValidator
     {
         RuleFor(x => x.Title)
             .NotEmpty()
-            .MaximumLength(TodoItem.MaxTitleLength);
+            .Must(HaveValidLength)
+            .WithMessage(
+                $"Todo title cannot exceed {TodoItem.MaxTitleLength} characters.");
+    }
+
+    private static bool HaveValidLength(string title)
+    {
+        return string.IsNullOrWhiteSpace(title) ||
+               title.Trim().Length <= TodoItem.MaxTitleLength;
     }
 }
