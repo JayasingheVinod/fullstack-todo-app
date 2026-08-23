@@ -6,7 +6,7 @@ namespace TodoApp.UnitTests.TestDoubles;
 internal sealed class FakeTodoRepository
     : ITodoRepository
 {
-    public List<TodoItem> Items { get; } = [];
+public List<TodoItem> Items { get; } = new List<TodoItem>();
 
     public Guid? LastRequestedUserId { get; private set; }
 
