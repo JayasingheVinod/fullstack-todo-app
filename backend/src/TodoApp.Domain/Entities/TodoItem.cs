@@ -15,7 +15,9 @@ public sealed class TodoItem
             throw new ArgumentException("Todo title cannot be empty.", nameof(title));
         }
 
-        if (title.Length > MaxTitleLength)
+        var normalizedTitle = title.Trim();
+
+        if (normalizedTitle.Length > MaxTitleLength)
         {
             throw new ArgumentException(
                 $"Todo title cannot exceed {MaxTitleLength} characters.",
@@ -28,7 +30,7 @@ public sealed class TodoItem
         }
 
         Id = Guid.NewGuid();
-        Title = title.Trim();
+        Title = normalizedTitle;
         UserId = userId;
         CreatedAtUtc = DateTime.UtcNow;
     }
