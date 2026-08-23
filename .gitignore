@@ -1,0 +1,29 @@
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+
+# Node / Angular
+**/node_modules/
+**/dist/
+**/.angular/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Test coverage
+coverage/
+TestResults/
