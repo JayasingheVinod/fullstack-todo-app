@@ -1,0 +1,213 @@
+<main class="todos-page">
+  <section class="todos-container">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">
+          Todo App
+        </p>
+
+        <h1>
+          My Todos
+        </h1>
+
+        @if (authService.currentUserEmail()) {
+          <p class="user-email">
+            {{ authService.currentUserEmail() }}
+          </p>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="logout-button"
+        (click)="logout()"
+      >
+        Sign out
+      </button>
+    </header>
+
+    <section
+      class="todo-card"
+      aria-labelledby="add-todo-title"
+    >
+      <div class="card-heading">
+        <h2 id="add-todo-title">
+          Add a todo
+        </h2>
+
+        <p>
+          Keep track of what you need to get done.
+        </p>
+      </div>
+
+      <form
+        class="todo-form"
+        [formGroup]="todoForm"
+        (ngSubmit)="addTodo()"
+        novalidate
+      >
+        <div class="input-group">
+          <label
+            class="visually-hidden"
+            for="todo-title"
+          >
+            Todo title
+          </label>
+
+          <input
+            id="todo-title"
+            type="text"
+            formControlName="title"
+            autocomplete="off"
+            placeholder="What needs to be done?"
+          />
+
+          <button
+            type="submit"
+            class="add-button"
+            [disabled]="adding()"
+          >
+            @if (adding()) {
+              Adding...
+            } @else {
+              Add
+            }
+          </button>
+        </div>
+
+        @if (
+          todoForm.controls.title.touched &&
+          todoForm.controls.title.hasError('required')
+        ) {
+          <p class="field-error">
+            Enter a todo title.
+          </p>
+        }
+
+        @if (
+          todoForm.controls.title.touched &&
+          todoForm.controls.title.hasError('maxlength')
+        ) {
+          <p class="field-error">
+            Todo title cannot exceed
+            200 characters.
+          </p>
+        }
+      </form>
+
+      @if (actionError()) {
+        <div
+          class="alert"
+          role="alert"
+        >
+          {{ actionError() }}
+        </div>
+      }
+    </section>
+
+    <section
+      class="list-section"
+      aria-labelledby="todo-list-title"
+    >
+      <div class="list-header">
+        <div>
+          <h2 id="todo-list-title">
+            Your list
+          </h2>
+
+          @if (!loading()) {
+            <p>
+              {{ todos().length }}
+              @if (todos().length === 1) {
+                item
+              } @else {
+                items
+              }
+            </p>
+          }
+        </div>
+
+        @if (loadError()) {
+          <button
+            type="button"
+            class="retry-button"
+            (click)="loadTodos()"
+          >
+            Try again
+          </button>
+        }
+      </div>
+
+      @if (loadError()) {
+        <div
+          class="alert"
+          role="alert"
+        >
+          {{ loadError() }}
+        </div>
+      }
+
+      @if (loading()) {
+        <div
+          class="state-card"
+          aria-live="polite"
+        >
+          Loading your todos...
+        </div>
+      } @else if (!loadError() && todos().length === 0) {
+        <div class="state-card empty-state">
+          <div
+            class="empty-icon"
+            aria-hidden="true"
+          >
+            ✓
+          </div>
+
+          <h3>
+            Nothing here yet
+          </h3>
+
+          <p>
+            Add your first todo above.
+          </p>
+        </div>
+      } @else if (todos().length > 0) {
+        <ul class="todo-list">
+          @for (todo of todos(); track todo.id) {
+            <li class="todo-item">
+              <div class="todo-content">
+                <p class="todo-title">
+                  {{ todo.title }}
+                </p>
+
+                <time
+                  class="todo-date"
+                  [attr.datetime]="todo.createdAtUtc"
+                >
+                  {{
+                    todo.createdAtUtc
+                      | date: 'medium'
+                  }}
+                </time>
+              </div>
+
+              <button
+                type="button"
+                class="delete-button"
+                [disabled]="deletingTodoId() !== null"
+                [attr.aria-label]="'Delete ' + todo.title"
+                (click)="deleteTodo(todo)"
+              >
+                @if (deletingTodoId() === todo.id) {
+                  Deleting...
+                } @else {
+                  Delete
+                }
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  </section>
+</main>
